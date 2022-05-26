@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 
-export function decorator() {
+export function AsyncHandler() {
   return function (
     _target: any,
     _propertyKey: string,
