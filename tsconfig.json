@@ -3,11 +3,13 @@
   "compilerOptions": {
     "sourceMap": true,
     "rootDir": ".",
+    "baseUrl": ".",
     "sourceRoot": "./src",
     "outDir": "./dist",
     "alwaysStrict": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
     "paths": {
       "src/*": ["src/*"]
     }
