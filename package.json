@@ -7,7 +7,7 @@
     "prebuild": "rimraf dist",
     "build": "tsc -p .",
     "start:prod": "node -r ./tsconfig-paths-bootstrap.js dist/index",
-    "start:dev": "nodemon --watch 'src' --ext 'ts' --exec '{package_manager} prebuild && {package_manager} build && node -r ./tsconfig-paths-bootstrap.js dist/index'"
+    "start:dev": "nodemon --watch 'src' --ext 'ts' --exec 'yarn prebuild && yarn build && node -r ./tsconfig-paths-bootstrap.js dist/app.js'"
   },
   "author": "",
   "license": "UNLICENSED",
