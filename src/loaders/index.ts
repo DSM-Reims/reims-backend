@@ -4,4 +4,5 @@ import * as expressLoader from './express';
 
 export const init = async (app: express.Application) => {
   await typeormLoader.init();
+  expressLoader.init(app);
 };
