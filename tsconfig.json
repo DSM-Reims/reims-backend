@@ -2,9 +2,8 @@
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
     "sourceMap": true,
-    "rootDir": ".",
-    "baseUrl": ".",
-    "sourceRoot": "./src",
+    "rootDir": "./src",
+    "baseUrl": "./",
     "outDir": "./dist",
     "alwaysStrict": true,
     "experimentalDecorators": true,
