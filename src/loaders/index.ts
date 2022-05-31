@@ -3,6 +3,6 @@ import * as typeormLoader from './typeorm';
 import * as expressLoader from './express';
 
 export const init = async (app: express.Application) => {
-  await typeormLoader.init();
+  await typeormLoader.init(app);
   expressLoader.init(app);
 };
