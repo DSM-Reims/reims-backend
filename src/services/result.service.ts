@@ -1,4 +1,8 @@
+import { PatchResultQueryDto } from 'src/dtos/request/patch-result.dto';
+import { PostResultQueryDto } from 'src/dtos/request/post-result.dto';
+import { VoteQueryDto } from 'src/dtos/request/vote.dto';
 import { Result } from 'src/shared/entities/result/result.entity';
+import { Vote } from 'src/shared/entities/vote/vote.entity';
 import { Container, Service } from 'typedi';
 import { DataSource, Repository } from 'typeorm';
 
@@ -19,16 +23,25 @@ export class ResultService {
     return this.repogitory.findOneBy({ clubId });
   }
 
-  postResult({
-    
-  }) {
-    
+  voteResult(data: VoteQueryDto & { userId: number; }) {
+    return this.db.getRepository(Vote).save({ userId: data.userId, clubId: data.club_id });
+  }
+
+  postResult(data: PostResultQueryDto & { clubId: number; }) {
+    return this.repogitory.save({
+      clubId: data.clubId,
+      name: data.title,
+      description: data.content,
+    });
   }
 
   patchResult({
-
-  }) {
-    
+    title: name,
+    content: description,
+    clubId,
+  }: PatchResultQueryDto & { clubId: number; }) {
+    const data = { clubId, name, description };
+    return this.repogitory.save(data);
   }
 
   deleteResult(clubId: number) {
