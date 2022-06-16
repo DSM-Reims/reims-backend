@@ -14,6 +14,9 @@ export class User {
   @Column({ length: 4 })
   name!: string;
 
+  @Column({ length: 4, nullable: true })
+  chargeName!: string;
+
   @Column({ enum: ['CLUB', 'TEACHER'] })
   userType!: string;
 }
