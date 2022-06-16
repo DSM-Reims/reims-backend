@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { CreateApplicationRequestDto } from 'src/dtos/request/create-application.dto';
 import { GetApplicationQueryDto } from 'src/dtos/request/get-application.dto';
+import { ApplicationParamsDto } from 'src/dtos/request/application-params.dto';
 import { GoodsService } from 'src/services/goods.service';
 import {
   Delete,
@@ -16,6 +17,7 @@ import {
 } from 'src/shared/decorators/validator.decorator';
 import { Inject, Service } from 'typedi';
 
+export type CustomRequest<P, B, Q> = Request<P, any, B, Q, Record<string, any>>;
 @Service()
 @Prefix('/goods')
 export class GoodsController {
@@ -24,36 +26,44 @@ export class GoodsController {
   @Post()
   @ValidateApiKey()
   @ValidateBody(CreateApplicationRequestDto)
-  async createGoodsApplication(req: Request, res: Response) {
-    res.send(
-      await this.service.createApplication(
-        req.headers['x-api-key'] as string,
-        req.body,
-      ),
-    );
+  async createGoodsApplication(
+    req: CustomRequest<{}, CreateApplicationRequestDto, {}>,
+    res: Response,
+  ) {
+    res.send(await this.service.createApplication(req.user, req.body));
   }
 
   @Get()
   @ValidateApiKey()
   @ValidateQuery(GetApplicationQueryDto)
-  async getGoods(req: Request, res: Response) {
-    res.send(
-      await this.service.getGoods(
-        req.headers['x-api-key'] as string,
-        req.query,
-      ),
-    );
+  async getGoods(
+    req: CustomRequest<{}, {}, GetApplicationQueryDto>,
+    res: Response,
+  ) {
+    res.send(await this.service.getGoods(req.user, req.query));
   }
 
-  @Patch('/return/:goods_uuid')
+  @Patch('/return/:applicationUUID')
   @ValidateApiKey('TEACHER')
-  async updateReturned(req: Request, res: Response) {}
+  async updateReturned(
+    req: CustomRequest<ApplicationParamsDto, {}, {}>,
+    res: Response,
+  ) {
+    res.send(await this.service.updateReturned(req.user, req.params));
+  }
 
-  @Delete('/:goods_uuid')
+  @Delete('/:applicationUUID')
   @ValidateApiKey()
-  async deleteApplication(req: Request, res: Response) {}
+  async deleteApplication(
+    req: CustomRequest<ApplicationParamsDto, {}, {}>,
+    res: Response,
+  ) {
+    res.send(await this.service.deleteApplication(req.user, req.params));
+  }
 
   @Get('/applicated_clubs')
   @ValidateApiKey('TEACHER')
-  async getApplicatedClubs(req: Request, res: Response) {}
+  async getApplicatedClubs(req: Request, res: Response) {
+    res.send(await this.service.getApplicatedClubs());
+  }
 }

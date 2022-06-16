@@ -23,6 +23,8 @@ export const init = (app: Application) => {
     (err: HttpException, req: Request, res: Response, next: NextFunction) => {
       const statusCode: number = err.statusCode || 500;
       logger.error({ header: 'HTTP', message: `${req.path} ${statusCode}` });
+      logger.error({ header: 'HTTP', message: `${err.message}` });
+      console.log(err);
       res.status(statusCode).json({
         statusCode: statusCode,
         message: err.message,

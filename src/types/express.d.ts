@@ -4,7 +4,7 @@ declare global {
   namespace Express {
     export interface User extends Entity.User {}
     interface Request {
-      user?: User;
+      user: User;
     }
   }
 }

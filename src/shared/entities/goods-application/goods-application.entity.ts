@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -14,7 +15,10 @@ export class GoodsApplication {
 
   @ManyToOne(() => User)
   @JoinColumn()
-  club!: number;
+  club!: User;
+
+  @Column({ length: 36 })
+  uuid!: string;
 
   @Column({ length: 30 })
   goodsName!: string;
@@ -24,4 +28,13 @@ export class GoodsApplication {
 
   @Column({ length: 100, nullable: true })
   url!: string;
+
+  @Column({ default: false })
+  isReturned!: boolean;
+
+  @Column({ nullable: true })
+  returnedAt?: Date;
+
+  @CreateDateColumn()
+  createdAt!: Date;
 }

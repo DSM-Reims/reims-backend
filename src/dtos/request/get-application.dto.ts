@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, Min } from 'class-validator';
+import { IsNumber, IsOptional, IsUUID, Min } from 'class-validator';
 
 export class GetApplicationQueryDto {
   @IsNumber()
@@ -11,4 +11,8 @@ export class GetApplicationQueryDto {
   @Min(1)
   @Type(() => Number)
   limit!: number;
+
+  @IsUUID('4', { each: true })
+  @IsOptional()
+  filter?: string[];
 }
