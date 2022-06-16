@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { GetApplicationQueryDto } from 'src/dtos/request/get-application.dto';
 import { GoodsService } from 'src/services/goods.service';
 import {
   Delete,
@@ -8,6 +9,9 @@ import {
 } from 'src/shared/decorators/http-method.decorator';
 import { Prefix } from 'src/shared/decorators/prefix.decorator';
 import { ValidateApiKey } from 'src/shared/decorators/validate-key.decorator';
+import {
+  ValidateQuery,
+} from 'src/shared/decorators/validator.decorator';
 import { Inject, Service } from 'typedi';
 
 @Service()
@@ -21,7 +25,15 @@ export class GoodsController {
 
   @Get()
   @ValidateApiKey()
-  async getGoods(req: Request, res: Response) {}
+  @ValidateQuery(GetApplicationQueryDto)
+  async getGoods(req: Request, res: Response) {
+    res.send(
+      await this.service.getGoods(
+        req.headers['x-api-key'] as string,
+        req.query,
+      ),
+    );
+  }
 
   @Patch('/return/:goods_uuid')
   @ValidateApiKey('TEACHER')
