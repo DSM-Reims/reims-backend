@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { CreateApplicationRequestDto } from 'src/dtos/request/create-application.dto';
 import { GetApplicationQueryDto } from 'src/dtos/request/get-application.dto';
 import { GoodsService } from 'src/services/goods.service';
 import {
@@ -10,6 +11,7 @@ import {
 import { Prefix } from 'src/shared/decorators/prefix.decorator';
 import { ValidateApiKey } from 'src/shared/decorators/validate-key.decorator';
 import {
+  ValidateBody,
   ValidateQuery,
 } from 'src/shared/decorators/validator.decorator';
 import { Inject, Service } from 'typedi';
@@ -21,7 +23,15 @@ export class GoodsController {
 
   @Post()
   @ValidateApiKey()
-  async createGoodsApplication(req: Request, res: Response) {}
+  @ValidateBody(CreateApplicationRequestDto)
+  async createGoodsApplication(req: Request, res: Response) {
+    res.send(
+      await this.service.createApplication(
+        req.headers['x-api-key'] as string,
+        req.body,
+      ),
+    );
+  }
 
   @Get()
   @ValidateApiKey()
