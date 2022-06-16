@@ -21,9 +21,11 @@ export const ValidateApiKey = (role?: 'CLUB' | 'TEACHER') => {
         .createQueryBuilder('user')
         .select()
         .where('user.code = :code', { code: req.headers['x-api-key'] });
+      const user = await qb.getOne();
       if (role) qb.where('user.userType = :userType', { userType: role });
-      if (!req.headers['x-api-key'] || !(await qb.getOne()))
-        throw new UnauthorizedException();
+      if (!req.headers['x-api-key'] || !user) throw new UnauthorizedException();
+
+      req.user = user;
       return originalFunction.apply(this, [req, res, next]);
     };
     return descriptor;
