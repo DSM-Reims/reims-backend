@@ -2,7 +2,8 @@ import type { Request, Response, NextFunction } from 'express';
 import multer from 'multer';
 import multerS3 from 'multer-s3';
 import aws from 'aws-sdk';
-aws.config.loadFromPath(__dirname + "../../../aws.config.json");
+import path from 'path';
+aws.config.loadFromPath(path.join(__dirname, "../../../aws.config.json"));
 
 export const SingleMultipartData = () => {
   return (
