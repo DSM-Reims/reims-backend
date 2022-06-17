@@ -21,8 +21,8 @@ export const SingleMultipartData = () => {
         storage: multerS3({
           //@ts-ignore
           s3,
-          bucket: "",
-          acl: "",
+          bucket: "dsm-reims",
+          acl: "public-read",
           contentType: multerS3.AUTO_CONTENT_TYPE,
           key: (req, file, cb) => cb(null, req.user!.id as unknown as string),
         }),

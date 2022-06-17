@@ -36,3 +36,4 @@
 
 # Environment
 .env
+aws.config.json
