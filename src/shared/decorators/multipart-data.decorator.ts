@@ -17,15 +17,19 @@ export const SingleMultipartData = () => {
       res: Response,
       next: NextFunction,
     ) {
-      const s3 = new aws.S3();
+      const s3 = new aws.S3({
+        region: process.env.AWS_REGION,
+        accessKeyId: process.env.AWS_ACCESS_KEY,
+        secretAccessKey: process.env.AWS_SECRET_KEY
+      });
       const upload = multer({
         storage: multerS3({
           //@ts-ignore
           s3,
-          bucket: "dsm-reims",
-          acl: "public-read",
+          bucket: process.env.AWS_BUCKET_NAME!,
+          acl: "public-read-write",
           contentType: multerS3.AUTO_CONTENT_TYPE,
-          key: (req, file, cb) => cb(null, req.user!.id as unknown as string),
+          key: (req, file, cb) => cb(null, req.user!.name),
         }),
       }).single("data");
       await new Promise((resolve, reject) => {

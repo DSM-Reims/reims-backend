@@ -26,19 +26,25 @@ export class ResultController {
     res.status(200).json(result);
   }
 
+  @Get("/vote/:result_id")
+  async getVoteCount(req: Request, res: Response) {
+    const result = await this.service.getVoteCount(req.params.result_id as unknown as number);
+    res.status(200).json(result);
+  }
+
   @Post()
   @ValidateApiKey("CLUB")
   @ValidateBody(PostResultQueryDto)
   async uploadResults(req: Request, res: Response) {
-    await this.service.postResult(req.body);
-    res.status(201);
+    await this.service.postResult({ ...req.body, clubId: req.user!.id });
+    res.status(201).json();
   }
 
   @Post("/vote")
   @ValidateApiKey()
   async voteResult(req: Request, res: Response) {
     await this.service.voteResult({ ...req.body, userId: req.user!.id });
-    res.status(201);
+    res.status(201).json();
   }
 
   @Patch()
@@ -46,27 +52,27 @@ export class ResultController {
   @ValidateBody(PatchResultQueryDto)
   async editResult(req: Request, res: Response) {
     await this.service.patchResult({ ...req.body, clubId: req.user!.id });
-    res.status(201);
+    res.status(201).json();
   }
 
   @Patch("/video")
   @ValidateApiKey("CLUB")
   @SingleMultipartData()
   async uploadVideo(_req: Request, res: Response) {
-    res.status(201);
+    res.status(201).json();
   }
 
   @Patch("/picture")
   @ValidateApiKey("CLUB")
   @SingleMultipartData()
   async uploadPicture(_req: Request, res: Response) {
-    res.status(201);
+    res.status(201).json();
   }
 
   @Delete()
   @ValidateApiKey("CLUB")
   async deletePicture(req: Request, res: Response) {
     await this.service.deleteResult(req.user!.id);
-    res.status(200);
+    res.status(200).json();
   }
 }

@@ -16,15 +16,21 @@ export class ResultService {
   }
 
   getResults() {
-    return this.repogitory.find();
+    return this.repogitory.find({
+      relations: ["club"],
+    });
   }
 
   getResult(clubId: number) {
     return this.repogitory.findOneBy({ clubId });
   }
 
+  getVoteCount(clubId: number) {
+    return this.repogitory.count({ where: { clubId } });
+  }
+
   voteResult(data: VoteQueryDto & { userId: number; }) {
-    return this.db.getRepository(Vote).save({ userId: data.userId, clubId: data.club_id });
+    return this.db.getRepository(Vote).save({ userId: data.userId, votedId: data.club_id });
   }
 
   postResult(data: PostResultQueryDto & { clubId: number; }) {
@@ -41,7 +47,7 @@ export class ResultService {
     clubId,
   }: PatchResultQueryDto & { clubId: number; }) {
     const data = { clubId, name, description };
-    return this.repogitory.save(data);
+    return this.repogitory.save({ ...data });
   }
 
   deleteResult(clubId: number) {
