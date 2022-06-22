@@ -5,7 +5,7 @@ import aws from 'aws-sdk';
 import path from 'path';
 aws.config.loadFromPath(path.join(__dirname, "../../../aws.config.json"));
 
-export const SingleMultipartData = () => {
+export const SingleMultipartData = (isVideo?: boolean) => {
   return (
     target: any,
     _propertyKey: string,
@@ -29,7 +29,7 @@ export const SingleMultipartData = () => {
           bucket: process.env.AWS_BUCKET_NAME!,
           acl: "public-read-write",
           contentType: multerS3.AUTO_CONTENT_TYPE,
-          key: (req, file, cb) => cb(null, req.user!.name),
+          key: (req, file, cb) => cb(null, isVideo ? `${req.user!.name}-video` : req.user!.name),
         }),
       }).single("data");
       await new Promise((resolve, reject) => {
