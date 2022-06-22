@@ -32,6 +32,12 @@ export class ResultController {
     res.status(200).json(result);
   }
 
+  @Get("/users")
+  @ValidateApiKey()
+  async getUsers(req: Request, res: Response) {
+    res.status(200).json(req.user);
+  }
+
   @Post()
   @ValidateApiKey("CLUB")
   @ValidateBody(PostResultQueryDto)
