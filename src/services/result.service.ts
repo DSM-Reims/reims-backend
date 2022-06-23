@@ -16,9 +16,12 @@ export class ResultService {
   }
 
   getResults() {
-    return this.repogitory.find({
-      relations: ["club"],
-    });
+    return this.repogitory.find({ relations: ["club"] });
+      // .createQueryBuilder()
+      // .leftJoin("vote", "Vote")
+      // .addSelect("COUNT(Vote)", "voteCount")
+      // .where("Vote.voted_id = Result.club_id")
+      // .getMany();
   }
 
   getResult(clubId: number) {
@@ -26,11 +29,11 @@ export class ResultService {
   }
 
   getVoteCount(clubId: number) {
-    return this.repogitory.count({ where: { clubId } });
+    return this.db.getRepository(Vote).count({ where: { votedId: clubId } });
   }
 
   voteResult(data: VoteQueryDto & { userId: number; }) {
-    return this.db.getRepository(Vote).save({ userId: data.userId, votedId: data.club_id });
+    return this.db.getRepository(Vote).insert({ userId: data.userId, votedId: data.club_id });
   }
 
   postResult(data: PostResultQueryDto & { clubId: number; }) {
